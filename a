@@ -1,0 +1,15 @@
+pkill -9 gzserver
+pkill -9 gzclient
+
+pkill gzserver
+pkill gzclient
+
+clear
+
+
+make a
+
+. install/setup.bash
+
+ros2 launch mjf_sim sim.launch.py
+
