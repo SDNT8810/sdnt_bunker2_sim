@@ -446,7 +446,7 @@
   <gazebo>
     <plugin name='diff_drive' filename='/opt/ros/humble/lib/libgazebo_ros_diff_drive.so'>
       <ros>
-        <remap from="cmd_vel" to="/cmd_vel"/>
+        <remap from="cmd_vel_nav" to="/cmd_vel"/>
       </ros>
 
       <!-- wheels -->
@@ -467,7 +467,7 @@
       <publish_wheel_tf>true</publish_wheel_tf>
 
       <odometry_frame>odom</odometry_frame>
-      <robot_base_frame>Robot_Body</robot_base_frame>   <!-- change between : Robot_Body / base_footprint -->
+      <robot_base_frame>base_link</robot_base_frame>   <!-- change between : Robot_Body / base_footprint -->
     </plugin>
   </gazebo>
 
@@ -505,7 +505,7 @@
   <joint name="lidar_joint" type="fixed">
     <parent link="Robot_Body"/>
     <child link="lidar_link"/>
-    <origin xyz="0 0 0.12" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0 0 0.52" rpy="0.0 0.0 0.0"/>
   </joint>
 
   <gazebo reference="lidar_link">
@@ -545,21 +545,21 @@
 
   <link name="camera_link">
     <visual>
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/>
       <geometry>
         <box size="0.015 0.130 0.022"/>
       </geometry>
     </visual>
 
     <collision>
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.0 0.0 0.1" rpy="0.0 0.0 0.0"/>
       <geometry>
         <box size="0.015 0.130 0.022"/>
       </geometry>
     </collision>
 
     <inertial>
-      <origin xyz="0.0 0.0 0.0" rpy="0.0 0.0 0.0"/>
+      <origin xyz="0.0 0.0 0.2" rpy="0.0 0.0 0.0"/>
       <mass value="0.035"/>
       <inertia ixx="0.001" ixy="0" ixz="0" iyy="0.001" iyz="0" izz="0.001" />
     </inertial>
@@ -568,13 +568,13 @@
   <joint name="camera_joint" type="fixed">
     <parent link="Robot_Body"/>
     <child link="camera_link"/>
-    <origin xyz="0.215 0 0.05" rpy="0.0 0.0 0.0"/>
+    <origin xyz="0.215 0 0.15" rpy="0.0 0.0 0.0"/>
   </joint>
 
   <link name="camera_depth_frame"/>
 
   <joint name="camera_depth_joint" type="fixed">
-    <origin xyz="0.0 0.0 0.0" rpy="${-pi/2} 0 ${-pi/2}"/>
+    <origin xyz="0.0 0.0 0.1" rpy="${-pi/2} 0 ${-pi/2}"/>
     <parent link="camera_link"/>
     <child link="camera_depth_frame"/>
   </joint>
@@ -582,12 +582,12 @@
   <gazebo reference="camera_link">
     <sensor name="depth_camera" type="depth">
       <visualize>true</visualize>
-      <update_rate>30.0</update_rate>
+      <update_rate>120.0</update_rate>
       <camera name="camera">
         <horizontal_fov>1.047198</horizontal_fov>
         <image>
-          <width>640</width>
-          <height>480</height>
+          <width>6400</width>
+          <height>4800</height>
           <format>R8G8B8</format>
         </image>
         <clip>
@@ -595,7 +595,7 @@
           <far>3</far>
         </clip>
       </camera>
-      <plugin name="depth_camera_controller" filename="/opt/ros/humble/lib/libgazebo_ros_camera.so">
+      <plugin name="depth_camera_controller" filename="/opt/ros/humble/lib/libgazebo_ros_camera.dylib">
         <baseline>0.2</baseline>
         <alwaysOn>true</alwaysOn>
         <updateRate>0.0</updateRate>
@@ -617,7 +617,7 @@
   </gazebo>
 
   <!-- GZ Controller -->
-  <gazebo reference="Robot_Body">
+  <gazebo reference="base_link">
      <material>Gazebo/Gray</material>
   </gazebo>
   
@@ -631,7 +631,7 @@
       <!-- <rightFrontJoint>wheel2_joint</rightFrontJoint> -->
       <leftRearJoint>wheel3_joint</leftRearJoint>
       <rightRearJoint>wheel4_joint</rightRearJoint>
-      <robotBaseFrame>Robot_Body</robotBaseFrame>    <!--change between : base_link / Robot_Body / base_footprint -->
+      <robotBaseFrame>base_link</robotBaseFrame>    <!--change between : base_link / Robot_Body / base_footprint -->
     </plugin>
   </gazebo>
 

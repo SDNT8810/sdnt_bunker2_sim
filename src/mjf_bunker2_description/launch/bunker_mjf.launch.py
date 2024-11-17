@@ -37,9 +37,9 @@ def generate_launch_description():
   params_dir = os.path.join(package_name, "config")
   # nav2_params = os.path.join(params_dir, "nav2_no_map_params.yaml")
   nav2_params = os.path.join(params_dir, 'nav2_params.yaml')
-  configured_params = RewrittenYaml(
-        source_file=nav2_params, root_key="", param_rewrites="", convert_types=True
-    )
+  # configured_params = RewrittenYaml(
+  #       source_file=nav2_params, root_key="", param_rewrites="", convert_types=True
+  #   )
   configured_params = RewrittenYaml(
         source_file=os.path.join(get_package_share_directory('mjf_bunker2_description'), 'config/nav2_params.yaml'), root_key="", param_rewrites="", convert_types=True
     )
@@ -66,6 +66,8 @@ def generate_launch_description():
     output='screen',
     arguments=['-d', LaunchConfiguration('rvizconfig')],
     parameters=[os.path.join(pkg_share, 'config/nav2_params.yaml'), {'use_sim_time': LaunchConfiguration('use_sim_time')}]
+    # parameters=[os.path.join(pkg_share, 'config/ekf_localization.yaml'), {'use_sim_time': LaunchConfiguration('use_sim_time')}]
+
   )
 
   spawn_entity = launch_ros.actions.Node(
@@ -80,7 +82,6 @@ def generate_launch_description():
     name='ekf_filter_node',
     output='screen',
     parameters=[os.path.join(pkg_share, 'config/ekf_localization.yaml'), {'use_sim_time': LaunchConfiguration('use_sim_time')}]
-    # parameters=[os.path.join(pkg_share, 'config/ekf.yaml'), {'use_sim_time': LaunchConfiguration('use_sim_time')}]
   )
 
   navigation2_cmd = IncludeLaunchDescription(
@@ -112,22 +113,22 @@ def generate_launch_description():
       PythonLaunchDescriptionSource([os.path.join(
          get_package_share_directory('slam_toolbox'), 'launch'),
          '/online_async_launch.py']),
-      # launch_arguments={
-          # "use_sim_time": "True",
-          # "autostart": "True",
-          # "odom_frame": "odom",
-          # "map_frame": "map",
-          # "base_frame": "base_link",
-          # "scan_topic": "/scan",
-          # "map_update_interval": "5.0",
-          # "max_laser_range": "30",
-          # "minimum_travel_distance": "0.1",
-          # "use_scan_matching": "true",
-          # "minimum_travel_heading": "1.57",
-          # "do_loop_closing": "true",
-          # "slam_methods": "hector",
-          # "pub_map_odom_transform": "true", # karto , hector , gmapping
-      # }.items(),
+      launch_arguments={
+          "use_sim_time": "True",
+          "autostart": "True",
+          "odom_frame": "odom",
+          "map_frame": "map",
+          "base_frame": "base_link",
+          "scan_topic": "/scan",
+          "map_update_interval": "5.0",
+          "max_laser_range": "30",
+          "minimum_travel_distance": "0.1",
+          "use_scan_matching": "true",
+          "minimum_travel_heading": "1.57",
+          "do_loop_closing": "true",
+          "slam_methods": "hector",
+          "pub_map_odom_transform": "true", # karto , hector , gmapping
+      }.items(),
   )
 
   robot_localization_local_node = Node(
@@ -140,7 +141,7 @@ def generate_launch_description():
       remappings=remapping
       + [
           ("odom/filtered", "odom/filtered/local"),
-          # ("imu", "/wit9073can_imu/data"),
+          ("imu", "/wit9073can_imu/data"),
       ],
   )
 
@@ -154,7 +155,7 @@ def generate_launch_description():
       remappings=remapping
       + [
           ("odom/filtered", "odom/filtered/global"),
-          # ("imu", "/wit9073can_imu/data"),
+          ("imu", "/wit9073can_imu/data"),
       ],
   )
 
@@ -195,8 +196,8 @@ def generate_launch_description():
                                         description='Absolute path to rviz config file'),
     launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                         description='Flag to enable use_sim_time'),
-    # launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
-    launch.actions.ExecuteProcess(cmd=['gzserver', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
+    launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
+    # launch.actions.ExecuteProcess(cmd=['gzserver', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
     joint_state_publisher_node,
     robot_state_publisher_node,
     spawn_entity,
