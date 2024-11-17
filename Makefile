@@ -49,7 +49,7 @@ c:
 a:	
 	make c
 	clear
-	colcon build
+	colcon build --packages-select mjf_bunker2_description
 .PHONY : a
 
 g:	

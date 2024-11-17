@@ -12,7 +12,7 @@ namespace/ekf_global_filter_node:
         
         # 1. Set the map_frame, odom_frame, and base_link frames to the appropriate frame names for your system.
         #     1a. If your system does not have a map_frame, just remove it, and make sure "world_frame" is set to the value of odom_frame.
-        # 2. If you are fusing continuous position data such as wheel encoder odometry, visual odometry, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
+        # 2. If you are fusing continuous position data such as wheel encoder odom, visual odom, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
         # 3. If you are fusing global absolute position data that is subject to discrete jumps (e.g., GPS or position updates from landmark observations) then:
         #     3a. Set your "world_frame" to your map_frame value
         #     3b. MAKE SURE something else is generating the odom->base_link transform. Note that this can even be another state estimation node from robot_localization! However, that instance should *not* fuse the global data.
@@ -29,7 +29,7 @@ namespace/ekf_global_filter_node:
                        false, false,  false ] # ddX,   ddY,    ddZ
         odom0_differential: false
 
-        odom1: odometry/gps
+        odom1: odom/gps
         odom1_config: [ true,  true,  false,
                        false, false,  false,
                        false, false,  false,
@@ -77,7 +77,7 @@ namespace/ekf_local_filter_node:
         
         # 1. Set the map_frame, odom_frame, and base_link frames to the appropriate frame names for your system.
         #     1a. If your system does not have a map_frame, just remove it, and make sure "world_frame" is set to the value of odom_frame.
-        # 2. If you are fusing continuous position data such as wheel encoder odometry, visual odometry, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
+        # 2. If you are fusing continuous position data such as wheel encoder odom, visual odom, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
         # 3. If you are fusing global absolute position data that is subject to discrete jumps (e.g., GPS or position updates from landmark observations) then:
         #     3a. Set your "world_frame" to your map_frame value
         #     3b. MAKE SURE something else is generating the odom->base_link transform. Note that this can even be another state estimation node from robot_localization! However, that instance should *not* fuse the global data.

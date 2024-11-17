@@ -1,4 +1,17 @@
 /temp
+
 .vscode
+
 */.DS_Store
+
 .DS_Store
+
+/build
+
+/log
+
+/install
+
+build
+install
+log

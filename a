@@ -6,10 +6,13 @@ pkill gzclient
 
 clear
 
+rm -r -f build log install
+clear
+echo "Clean done"
 
-make a
+colcon build --packages-select mjf_bunker2_description
 
-. install/setup.bash
+source install/setup.zsh
 
-ros2 launch mjf_sim sim.launch.py
+ros2 launch mjf_bunker2_description bunker_mjf.launch.py
 

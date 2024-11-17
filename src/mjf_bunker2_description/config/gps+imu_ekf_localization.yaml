@@ -2,7 +2,7 @@
 namespace/ekf_global_filter_node:
     ros__parameters:
         # The frequency, in Hz, at which the filter will output a position estimate. Note that the filter will not begin computation until it receives at least one message from one of the inputs. It will then run continuously at the frequency specified here, regardless of whether it receives more measurements. Defaults to 30 if unspecified.
-        frequency: 50.0
+        frequency: 30.0
         
         # ekf_localization_node and ukf_localization_node both use a 3D omnidirectional motion model. If this parameter is set to true, no 3D information will be used in your state estimate. Use this if you are operating in a planar environment and want to ignore the effect of small variations in the ground plane that might otherwise be detected by, for example, an IMU. Defaults to false if unspecified.
         two_d_mode: true
@@ -15,14 +15,14 @@ namespace/ekf_global_filter_node:
         
         # 1. Set the map_frame, odom_frame, and base_link frames to the appropriate frame names for your system.
         #     1a. If your system does not have a map_frame, just remove it, and make sure "world_frame" is set to the value of odom_frame.
-        # 2. If you are fusing continuous position data such as wheel encoder odometry, visual odometry, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
+        # 2. If you are fusing continuous position data such as wheel encoder odom, visual odom, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
         # 3. If you are fusing global absolute position data that is subject to discrete jumps (e.g., GPS or position updates from landmark observations) then:
         #     3a. Set your "world_frame" to your map_frame value
         #     3b. MAKE SURE something else is generating the odom->base_link transform. Note that this can even be another state estimation node from robot_localization! However, that instance should *not* fuse the global data.
         map_frame: map              # Defaults to "map" if unspecified
         odom_frame: odom            # Defaults to "odom" if unspecified
         base_link_frame: base_link  # Defaults to "base_link" if unspecified
-        world_frame: map            # Defaults to the value of odom_frame if unspecified
+        world_frame: odom            # Defaults to the value of odom_frame if unspecified
         
         odom0: odom
         odom0_config: [ true,  true,  false,  # X,     Y,      Z
@@ -31,7 +31,7 @@ namespace/ekf_global_filter_node:
                        false, false,   true,  # droll, dpitch, dyaw
                        false, false,  false]  # ddX,   ddY,    ddZ
 
-        odom1: odometry/gps
+        odom1: odom/gps
         odom1_config: [ true,  true,  false,
                        false, false,  false,
                        false, false,  false,
@@ -50,7 +50,7 @@ namespace/ekf_global_filter_node:
 namespace/ekf_local_filter_node:
     ros__parameters:
         # The frequency, in Hz, at which the filter will output a position estimate. Note that the filter will not begin computation until it receives at least one message from one of the inputs. It will then run continuously at the frequency specified here, regardless of whether it receives more measurements. Defaults to 30 if unspecified.
-        frequency: 50.0
+        frequency: 30.0
         
         # ekf_localization_node and ukf_localization_node both use a 3D omnidirectional motion model. If this parameter is set to true, no 3D information will be used in your state estimate. Use this if you are operating in a planar environment and want to ignore the effect of small variations in the ground plane that might otherwise be detected by, for example, an IMU. Defaults to false if unspecified.
         two_d_mode: true
@@ -67,7 +67,7 @@ namespace/ekf_local_filter_node:
         
         # 1. Set the map_frame, odom_frame, and base_link frames to the appropriate frame names for your system.
         #     1a. If your system does not have a map_frame, just remove it, and make sure "world_frame" is set to the value of odom_frame.
-        # 2. If you are fusing continuous position data such as wheel encoder odometry, visual odometry, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
+        # 2. If you are fusing continuous position data such as wheel encoder odom, visual odom, or IMU data, set "world_frame" to your odom_frame value. This is the default behavior for robot_localization's state estimation nodes.
         # 3. If you are fusing global absolute position data that is subject to discrete jumps (e.g., GPS or position updates from landmark observations) then:
         #     3a. Set your "world_frame" to your map_frame value
         #     3b. MAKE SURE something else is generating the odom->base_link transform. Note that this can even be another state estimation node from robot_localization! However, that instance should *not* fuse the global data.
@@ -107,7 +107,7 @@ namespace/navsat_transform_node:
         wait_for_datum: false
 
         # The time, in seconds, to wait before calculating the transform from GPS coordinates to your robot’s world frame.
-        delay: 10.0
+        delay: 1.0
 
         # Instead of using the first GPS location and IMU-based heading for the local-frame origin, users can specify the origin (datum) using this parameter. The fields in the parameter represent latitude and longitude in decimal degrees, and heading in radians. As navsat_transform_node assumes an ENU standard, a 0 heading corresponds to east.
         datum: [45.1467893, 10.0019068, 0.0]
