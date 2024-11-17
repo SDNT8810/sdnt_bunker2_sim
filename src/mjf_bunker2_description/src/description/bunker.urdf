@@ -71,7 +71,7 @@
     <xacro:Robot_Body_inertia m="22"/>
   </link>
 
-  <joint name="Body_joint" type="fixed">
+  <joint name="Robot_Body" type="fixed">
     <parent link="base_link"/>
     <child link="Robot_Body"/>
     <origin xyz="0.0 0.0 0.358" rpy="0.0 0.0 0.0"/>
@@ -258,7 +258,7 @@
     iyy="0.00232456564213727"
     iyz="-1.36036258272812E-18"
     izz="0.00308347787030649"
-    axz="-1"/>
+    axz="1"/>
   <xacro:wheel prefix="wheel3.1"
     xyz_w="0.0 0.0 0.0"
     xyz_I="5.55111512312578E-17 5.55111512312578E-17 -0.0720000000000002"
@@ -377,9 +377,8 @@
 
   <gazebo reference="imu_link">
     <sensor name="imu_sensor" type="imu">
-      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_imu_sensor.dylib" name="imu_plugin">
+      <plugin filename="/opt/ros/humble/lib/libgazebo_ros_imu_sensor.so" name="imu_plugin">
         <ros>
-          <namespace>/demo</namespace>
           <remapping>~/out:=imu</remapping>
         </ros>
         <initial_orientation_as_reference>false</initial_orientation_as_reference>
@@ -445,15 +444,14 @@
   </gazebo>
 
   <gazebo>
-    <plugin name='diff_drive' filename='/opt/ros/humble/lib/libgazebo_ros_diff_drive.dylib'>
+    <plugin name='diff_drive' filename='/opt/ros/humble/lib/libgazebo_ros_diff_drive.so'>
       <ros>
-        <namespace>/demo</namespace>
         <remap from="cmd_vel" to="/cmd_vel"/>
       </ros>
 
       <!-- wheels -->
-      <left_joint>wheel4_joint</left_joint>
-      <right_joint>wheel3_joint</right_joint>
+      <left_joint>wheel3_joint</left_joint>
+      <right_joint>wheel4_joint</right_joint>
 
       <!-- kinematics -->
       <wheel_separation>0.4</wheel_separation>
@@ -465,16 +463,16 @@
 
       <!-- output -->
       <publish_odom>true</publish_odom>
-      <publish_odom_tf>true</publish_odom_tf>
+      <publish_odom_tf>false</publish_odom_tf>
       <publish_wheel_tf>true</publish_wheel_tf>
 
       <odometry_frame>odom</odometry_frame>
-      <robot_base_frame>base_link</robot_base_frame>   <!-- change between : Robot_Body / base_footprint -->
+      <robot_base_frame>Robot_Body</robot_base_frame>   <!-- change between : Robot_Body / base_footprint -->
     </plugin>
   </gazebo>
 
   <!-- <gazebo>
-    <plugin name="joint_state_publisher" filename="/opt/ros/humble/lib/libgazebo_ros_joint_state_publisher.dylib">
+    <plugin name="joint_state_publisher" filename="/opt/ros/humble/lib/libgazebo_ros_joint_state_publisher.so">
       <joint_name>wheel4_joint</joint_name>
       <joint_name>wheel3_joint</joint_name>
       <link_name>wheel3_link</link_name>
@@ -535,7 +533,7 @@
           <stddev>0.01</stddev>
         </noise>
       </ray>
-      <plugin name="scan" filename="/opt/ros/humble/lib/libgazebo_ros_ray_sensor.dylib">
+      <plugin name="scan" filename="/opt/ros/humble/lib/libgazebo_ros_ray_sensor.so">
         <ros>
           <remapping>~/out:=scan</remapping>
         </ros>
@@ -597,7 +595,7 @@
           <far>3</far>
         </clip>
       </camera>
-      <plugin name="depth_camera_controller" filename="/opt/ros/humble/lib/libgazebo_ros_camera.dylib">
+      <plugin name="depth_camera_controller" filename="/opt/ros/humble/lib/libgazebo_ros_camera.so">
         <baseline>0.2</baseline>
         <alwaysOn>true</alwaysOn>
         <updateRate>0.0</updateRate>
@@ -624,15 +622,15 @@
   </gazebo>
   
   <gazebo>
-    <plugin name="object_controller" filename="/opt/ros/humble/lib/libgazebo_ros_planar_move.dylib">
+    <plugin name="object_controller" filename="/opt/ros/humble/lib/libgazebo_ros_planar_move.so">
       <commandTopic>cmd_vel</commandTopic>
       <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <odometryRate>20.0</odometryRate>
       <!-- <leftFrontJoint>wheel1_joint</leftFrontJoint> -->
       <!-- <rightFrontJoint>wheel2_joint</rightFrontJoint> -->
-      <leftRearJoint>wheel4_joint</leftRearJoint>
-      <rightRearJoint>wheel3_joint</rightRearJoint>
+      <leftRearJoint>wheel3_joint</leftRearJoint>
+      <rightRearJoint>wheel4_joint</rightRearJoint>
       <robotBaseFrame>Robot_Body</robotBaseFrame>    <!--change between : base_link / Robot_Body / base_footprint -->
     </plugin>
   </gazebo>

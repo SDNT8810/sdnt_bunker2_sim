@@ -112,14 +112,14 @@ def generate_launch_description():
       PythonLaunchDescriptionSource([os.path.join(
          get_package_share_directory('slam_toolbox'), 'launch'),
          '/online_async_launch.py']),
-      launch_arguments={
-          "use_sim_time": "True",
+      # launch_arguments={
+          # "use_sim_time": "True",
           # "autostart": "True",
           # "odom_frame": "odom",
           # "map_frame": "map",
           # "base_frame": "base_link",
           # "scan_topic": "/scan",
-          # "map_update_interval": "1.0",
+          # "map_update_interval": "5.0",
           # "max_laser_range": "30",
           # "minimum_travel_distance": "0.1",
           # "use_scan_matching": "true",
@@ -127,7 +127,7 @@ def generate_launch_description():
           # "do_loop_closing": "true",
           # "slam_methods": "hector",
           # "pub_map_odom_transform": "true", # karto , hector , gmapping
-      }.items(),
+      # }.items(),
   )
 
   robot_localization_local_node = Node(
@@ -140,7 +140,7 @@ def generate_launch_description():
       remappings=remapping
       + [
           ("odom/filtered", "odom/filtered/local"),
-          ("imu", "/wit9073can_imu/data"),
+          # ("imu", "/wit9073can_imu/data"),
       ],
   )
 
@@ -154,7 +154,7 @@ def generate_launch_description():
       remappings=remapping
       + [
           ("odom/filtered", "odom/filtered/global"),
-          ("imu", "/wit9073can_imu/data"),
+          # ("imu", "/wit9073can_imu/data"),
       ],
   )
 
@@ -176,13 +176,13 @@ def generate_launch_description():
   gps_static_transform = Node(
       package = "tf2_ros", 
       executable = "static_transform_publisher",
-      arguments = ["0", "0", "0", "0", "0", "0", "base_link", "gps"] # x y z yaw pitch roll frame_id child_frame_id
+      arguments = ["0", "0", "0", "0", "0", "0", "Robot_Body", "gps"] # x y z yaw pitch roll frame_id child_frame_id
   )
 
   imu_static_transform = Node(
       package = "tf2_ros", 
       executable = "static_transform_publisher",
-      arguments = ["0", "0", "0", "0", "0", "0", "base_link", "imu"] # x y z yaw pitch roll frame_id child_frame_id
+      arguments = ["0", "0", "0", "0", "0", "0", "Robot_Body", "imu"] # x y z yaw pitch roll frame_id child_frame_id
   )
 
 
@@ -195,8 +195,8 @@ def generate_launch_description():
                                         description='Absolute path to rviz config file'),
     launch.actions.DeclareLaunchArgument(name='use_sim_time', default_value='True',
                                         description='Flag to enable use_sim_time'),
-    launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.so', '-s', 'libgazebo_ros_factory.so', world_path], output='screen'),
-    # launch.actions.ExecuteProcess(cmd=['gzserver', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
+    # launch.actions.ExecuteProcess(cmd=['gazebo', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
+    launch.actions.ExecuteProcess(cmd=['gzserver', '--verbose', '-s', 'libgazebo_ros_init.dylib', '-s', 'libgazebo_ros_factory.dylib', world_path], output='screen'),
     joint_state_publisher_node,
     robot_state_publisher_node,
     spawn_entity,
